@@ -6,7 +6,7 @@ git rm file*
 git checkout branch-carol
 git rm file*
 git checkout master
-git branch -d branch-alice
-git branch -d branch-bob
-git branch -d branch-carol
+git branch -D branch-alice
+git branch -D branch-bob
+git branch -D branch-carol
 
