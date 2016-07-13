@@ -9,6 +9,6 @@ echo bob message 1 > file-bob.txt
 git add file*
 git commit -m "bob : init my branch"
 git checkout -b branch-carol
-echo carol message 1 > file-alice.txt
+echo carol message 1 > file-carol.txt
 git add file*
 git commit -m "carol : init my branch"
