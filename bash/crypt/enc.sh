@@ -7,22 +7,26 @@ function decodeFile() {
 	openssl enc -d -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
 }
 function listDirs {
-        for d in `find $1 -type d -maxdepth 1`
+	drtr=$(basename $1)
+        for d in `find $drtr -type d -maxdepth 1`
         do
       	 	listFiles $d $2
+		#listDir[$i]=$d
+		#i=$((i+1))
         done
+	find $drtr -depth -type d -exec ./crp-tools.sh encodeFilename {} \;
 }
 function listFiles {
 	declare -a listFile
 	i=0
         for f in `find $1 -type f -maxdepth 1`
         do
-                echo note le fichier $f = `basename $f`
+                #echo note le fichier $f = `basename $f`
 		listFile[$i]=$f
 		i=$((i+1))
         done
 	for i in ${listFile[*]}; do
-        	echo $i
+        	#echo $i
 		$2 $i
 	done
 }

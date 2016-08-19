@@ -4,7 +4,18 @@ function encodeFile() {
 	openssl enc -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
 }
 function decodeFile() {
-	openssl enc -d -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
+	echo $1 > .tmp
+	openssl enc -d -aes-256-cbc -salt -in .tmp -out $2 -pass file:./cle.bin
+}
+function encodeFilename() {
+	filename=$(basename $1)
+	dirname=$(dirname $1)
+	mv $dirname/$filename $dirname/$(encodeString $filename)
+}
+function decodeFilename() {
+        filename=$(basename $1)
+        dirname=$(dirname $1)
+	mv $dirname/$filename $dirname/$(decodeString $filename)
 }
 function encodeString() {
 	VALEUR="$(echo $* | openssl enc -aes-256-cbc -salt -pass file:./cle.bin | base64)"
