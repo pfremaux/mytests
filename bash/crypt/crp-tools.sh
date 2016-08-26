@@ -10,11 +10,13 @@ function decodeFile() {
 function encodeFilename() {
 	filename=$(basename $1)
 	dirname=$(dirname $1)
+	#echo mv $dirname/$filename $dirname/$(encodeString $filename)
 	mv $dirname/$filename $dirname/$(encodeString $filename)
 }
 function decodeFilename() {
-        filename=$(basename $1)
-        dirname=$(dirname $1)
+	filename=$(basename $1)
+	dirname=$(dirname $1)
+	#echo mv $dirname/$filename $dirname/$(decodeString $filename)
 	mv $dirname/$filename $dirname/$(decodeString $filename)
 }
 function encodeString() {

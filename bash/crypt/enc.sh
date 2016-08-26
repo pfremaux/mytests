@@ -8,18 +8,16 @@ function decodeFile() {
 }
 function listDirs {
 	drtr=$(basename $1)
-        for d in `find $drtr -type d -maxdepth 1`
-        do
-      	 	listFiles $d $2
-		#listDir[$i]=$d
-		#i=$((i+1))
-        done
-	find $drtr -depth -type d -exec ./crp-tools.sh encodeFilename {} \;
+	for d in `find $drtr -maxdepth 1 -type d`
+	do
+		listFiles $d $2
+	done
+	find $drtr -depth -exec ./crp-tools.sh encodeFilename {} \; -type d
 }
 function listFiles {
 	declare -a listFile
 	i=0
-        for f in `find $1 -type f -maxdepth 1`
+        for f in `find $1 -maxdepth 1 -type f`
         do
                 #echo note le fichier $f = `basename $f`
 		listFile[$i]=$f
@@ -34,6 +32,7 @@ function listFiles {
 function mainEncodeFile() {
 	FILE_NAME=`basename $1`
 	PATH_FILE=`dirname $1`
+	echo encode $FILE_NAME
 	ENCODED_NAME=$(./crp-tools.sh encodeString $FILE_NAME)
 	encodeFile $PATH_FILE/$FILE_NAME $PATH_FILE/$ENCODED_NAME
 	rm $PATH_FILE/$FILE_NAME

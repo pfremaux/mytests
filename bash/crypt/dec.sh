@@ -6,32 +6,31 @@ function encodeFile() {
 function decodeFile() {
 	openssl enc -d -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
 }
-
-
 function listDirs {
 	drtr=$(basename $1)
-	for d in `find $drtr -type d -maxdepth 1`
-        do
-        	listFiles $d $2
-        done
-	find $drtr -depth -type d -exec ./crp-tools.sh decodeFilename {} \;
+	for d in `find $drtr -maxdepth 1 -type d`
+	do
+		listFiles $d $2
+	done
+	find $drtr -depth -exec ./crp-tools.sh decodeFilename {} \; -type d
 }
 function listFiles {
 	declare -a listFile
         i=0
-        for f in `find $1 -type f -maxdepth 1`
+        for f in `find $1 -maxdepth 1 -type f`
         do
-                listFile[$i]=$f
-		i=$((i+1))
+            listFile[$i]=$f
+			i=$((i+1))
         done
         for i in ${listFile[*]}; do
-                $2 $i
+            $2 $i
         done
 }
 
 function mainDecodeFile() {
 	ENCODED_NAME=`basename $1`
 	PATH_FILE=`dirname $1`
+	echo decode $ENCODED_NAME
 	DECODED_NAME=`./crp-tools.sh decodeString $ENCODED_NAME`
 	decodeFile $PATH_FILE/$ENCODED_NAME $PATH_FILE/$DECODED_NAME
 	rm $PATH_FILE/$ENCODED_NAME
@@ -44,7 +43,7 @@ then
         exit 1
 elif [ -d $1 ]
 then
-	listDirs $1 'mainDecodeFile'
+	listDirs `basename $1` 'mainDecodeFile'
 else
 	mainDecodeFile $1
 fi
