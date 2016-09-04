@@ -1,10 +1,15 @@
 #!/bin/bash
-
+export KEY_CRP=cle.bin
 function encodeFile() {
-	openssl enc -aes-256-cbc -salt -in $1 -out $2 -pass file:$KEY_CRP
+	openssl aes-256-cbc -salt -in $1 -out $1.enc -pass file:$KEY_CRP
+	#rm $1
+	mv $1.enc $1
 }
 function decodeFile() {
-	openssl enc -d -aes-256-cbc -salt -in $1 -out $2 -pass file:$KEY_CRP
+	#echo $1 ET $2 POUR $KEY_CRP DANS $(pwd)
+	openssl aes-256-cbc -d -salt -in $1 -out $1.dec -pass file:$KEY_CRP
+	#rm $1
+	mv $1.dec $1
 }
 function encodeFilename() {
 	filename=$(basename $1)

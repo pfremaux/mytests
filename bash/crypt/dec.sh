@@ -15,8 +15,10 @@ function listDirs {
 #	find $drtr -depth -exec ./crp-tools.sh decodeFilename {} \; -type d
 	newname=$(./crp-tools.sh decodeString $drtr)
 	mv $drtr $newname
+	echo decode les noms ...
+        find $newname -mindepth 1 -depth -exec ./crp-tools.sh decodeFilename {} \;
+	echo decode les contenus
 	find $newname -depth -type f -exec ./crp-tools.sh decodeFile {} {} \;
-        find $newname -depth -exec ./crp-tools.sh decodeFilename {} \;
 }
 function listFiles {
 	declare -a listFile
