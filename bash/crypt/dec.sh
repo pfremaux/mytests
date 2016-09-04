@@ -8,11 +8,15 @@ function decodeFile() {
 }
 function listDirs {
 	drtr=$(basename $1)
-	for d in `find $drtr -maxdepth 1 -type d`
-	do
-		listFiles $d $2
-	done
-	find $drtr -depth -exec ./crp-tools.sh decodeFilename {} \; -type d
+#	for d in `find $drtr -maxdepth 1 -type d`
+#	do
+#		listFiles $d $2
+#	done
+#	find $drtr -depth -exec ./crp-tools.sh decodeFilename {} \; -type d
+	newname=$(./crp-tools.sh decodeString $drtr)
+	mv $drtr $newname
+	find $newname -depth -type f -exec ./crp-tools.sh decodeFile {} {} \;
+        find $newname -depth -exec ./crp-tools.sh decodeFilename {} \;
 }
 function listFiles {
 	declare -a listFile
@@ -36,6 +40,7 @@ function mainDecodeFile() {
 	rm $PATH_FILE/$ENCODED_NAME
 }
 
+export KEY_CRP=$(readlink -f ./cle.bin)
 EXIST=`test -e $1`
 if [ $? -ne 0 ]
 then

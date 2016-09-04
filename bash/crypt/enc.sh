@@ -13,8 +13,8 @@ function listDirs {
 		echo $d
 	#	listFiles $d $2
 	done
+	find $drtr -depth -type f -exec ./crp-tools.sh encodeFile {} {} \;
 	find $drtr -depth -exec ./crp-tools.sh encodeFilename {} \;
-	find $drtr -type f -depth -exec ./crp-tools.sh encodeFile {} {} \;
 
 }
 function listFiles {
@@ -41,6 +41,7 @@ function mainEncodeFile() {
 	rm $PATH_FILE/$FILE_NAME
 }
 
+export KEY_CRP=$(readlink -f ./cle.bin)
 EXIST=`test -e $1`
 if [ $? -ne 0 ]
 then
