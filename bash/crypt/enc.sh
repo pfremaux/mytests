@@ -10,9 +10,12 @@ function listDirs {
 	drtr=$(basename $1)
 	for d in `find $drtr -maxdepth 1 -type d`
 	do
-		listFiles $d $2
+		echo $d
+	#	listFiles $d $2
 	done
-	find $drtr -depth -exec ./crp-tools.sh encodeFilename {} \; -type d
+	find $drtr -depth -exec ./crp-tools.sh encodeFilename {} \;
+	find $drtr -type f -depth -exec ./crp-tools.sh encodeFile {} {} \;
+
 }
 function listFiles {
 	declare -a listFile

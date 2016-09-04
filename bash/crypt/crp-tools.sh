@@ -1,11 +1,10 @@
 #!/bin/bash
 
 function encodeFile() {
-	openssl enc -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
+	openssl enc -aes-256-cbc -salt -in $1 -out $2 -pass file:$KEY_CRP
 }
 function decodeFile() {
-	echo $1 > .tmp
-	openssl enc -d -aes-256-cbc -salt -in .tmp -out $2 -pass file:./cle.bin
+	openssl enc -d -aes-256-cbc -salt -in $1 -out $2 -pass file:$KEY_CRP
 }
 function encodeFilename() {
 	filename=$(basename $1)
@@ -20,12 +19,12 @@ function decodeFilename() {
 	mv $dirname/$filename $dirname/$(decodeString $filename)
 }
 function encodeString() {
-	VALEUR="$(echo $* | openssl enc -aes-256-cbc -salt -pass file:./cle.bin | base64)"
+	VALEUR="$(echo $* | openssl enc -aes-256-cbc -salt -pass file:$KEY_CRP | base64)"
 	echo ${VALEUR//\//-}
 }
 function decodeString() {
 	VALEUR=${1//-/\/}
-	echo $VALEUR | base64 --decode | openssl enc -d -aes-256-cbc -salt -pass file:./cle.bin
+	echo $VALEUR | base64 --decode | openssl enc -d -aes-256-cbc -salt -pass file:$KEY_CRP
 }
 function listDirs {
         for d in `find $1 -type d`
