@@ -8,16 +8,9 @@ function decodeFile() {
 }
 function listDirs {
 	drtr=$(basename $1)
-#	for d in `find $drtr -maxdepth 1 -type d`
-#	do
-#		listFiles $d $2
-#	done
-#	find $drtr -depth -exec ./crp-tools.sh decodeFilename {} \; -type d
 	newname=$(./crp-tools.sh decodeString $drtr)
 	mv $drtr $newname
-	echo decode les noms ...
         find $newname -mindepth 1 -depth -exec ./crp-tools.sh decodeFilename {} \;
-	echo decode les contenus
 	find $newname -depth -type f -exec ./crp-tools.sh decodeFile {} {} \;
 }
 function listFiles {
