@@ -49,4 +49,21 @@ public class JTable {
     public String getRelativePath() {
         return "/" + getPackageName().replaceAll("\\.", "/") + "." + Utilities.capitalize(getName()) + ".java";
     }
+
+    public String toDao() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ");
+        sb.append(getPackageName());
+        sb.append(".daoc;\n");
+        sb.append("import org.springframework.data.jpa.repository.JpaRepository;\n");
+        sb.append("public interface ");
+        sb.append(Utilities.capitalize(name));
+        sb.append("Repository extends JpaRepository<");
+        sb.append(Utilities.capitalize(name));
+        sb.append(", Long> {}");
+        return sb.toString();
+    }
+
+
+
 }
