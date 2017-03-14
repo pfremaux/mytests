@@ -1,11 +1,5 @@
 #!/bin/bash
 
-function encodeFile() {
-	openssl enc -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
-}
-function decodeFile() {
-	openssl enc -d -aes-256-cbc -salt -in $1 -out $2 -pass file:./cle.bin
-}
 function listDirs {
 	drtr=$(basename $1)
 	newname=$(./crp-tools.sh decodeString $drtr)
@@ -13,26 +7,14 @@ function listDirs {
         find $newname -mindepth 1 -depth -exec ./crp-tools.sh decodeFilename {} \;
 	find $newname -depth -type f -exec ./crp-tools.sh decodeFile {} {} \;
 }
-function listFiles {
-	declare -a listFile
-        i=0
-        for f in `find $1 -maxdepth 1 -type f`
-        do
-            listFile[$i]=$f
-			i=$((i+1))
-        done
-        for i in ${listFile[*]}; do
-            $2 $i
-        done
-}
 
 function mainDecodeFile() {
 	ENCODED_NAME=`basename $1`
 	PATH_FILE=`dirname $1`
 	echo decode $ENCODED_NAME
 	DECODED_NAME=`./crp-tools.sh decodeString $ENCODED_NAME`
-	decodeFile $PATH_FILE/$ENCODED_NAME $PATH_FILE/$DECODED_NAME
-	rm $PATH_FILE/$ENCODED_NAME
+	./crp-tools.sh decodeFile $PATH_FILE/$ENCODED_NAME
+	./crp-tools.sh decodeFilename $PATH_FILE/$ENCODED_NAME
 }
 
 export KEY_CRP=$(readlink -f ./cle.bin)
